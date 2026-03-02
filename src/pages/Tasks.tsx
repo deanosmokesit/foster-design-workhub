@@ -180,10 +180,10 @@ export default function Tasks() {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8">
+      <div className="page-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <div>
           <h1 className="page-title">Tasks</h1>
-          <p className="text-slate-500 mt-4 text-lg">Manage your work tasks</p>
+          <p className="page-subtitle">Manage your work tasks</p>
         </div>
         <button
           onClick={() => {
@@ -199,20 +199,20 @@ export default function Tasks() {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+        <div className="search-bar flex-1">
+          <Search className="w-5 h-5 text-slate-400" />
           <input
             type="text"
             placeholder="Search tasks..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="input pl-14"
+            className="search-bar-input"
           />
         </div>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="input w-auto min-w-[150px]"
+          className="filter-dropdown"
         >
           <option value="all">All Status</option>
           {STATUS_OPTIONS.map((status) => (
@@ -222,7 +222,7 @@ export default function Tasks() {
         <select
           value={priorityFilter}
           onChange={(e) => setPriorityFilter(e.target.value)}
-          className="input w-auto min-w-[150px]"
+          className="filter-dropdown"
         >
           <option value="all">All Priority</option>
           {PRIORITY_OPTIONS.map((priority) => (

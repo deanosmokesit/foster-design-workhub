@@ -55,12 +55,12 @@ export default function Settings() {
 
   return (
     <div className="max-w-2xl">
-      <div>
+      <div className="page-header">
         <h1 className="page-title">Settings</h1>
-        <p className="text-slate-500 mt-4 text-lg">Manage your app preferences</p>
+        <p className="page-subtitle">Manage your app preferences</p>
       </div>
 
-      <div className="glass-card p-14">
+      <div className="card p-14">
         <div className="flex items-center gap-8 mb-10">
           <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-3xl">
             <Monitor className="w-8 h-8 text-blue-600" />

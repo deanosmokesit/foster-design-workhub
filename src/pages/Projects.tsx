@@ -198,10 +198,10 @@ export default function Projects() {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8">
+      <div className="page-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <div>
           <h1 className="page-title">Projects</h1>
-          <p className="text-slate-500 mt-4 text-lg">Manage your client projects</p>
+          <p className="page-subtitle">Manage your client projects</p>
         </div>
         <button
           onClick={() => {
@@ -217,28 +217,26 @@ export default function Projects() {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+        <div className="search-bar flex-1">
+          <Search className="w-5 h-5 text-slate-400" />
           <input
             type="text"
             placeholder="Search projects..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="input pl-14"
+            className="search-bar-input"
           />
         </div>
-        <div className="flex gap-4">
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="input w-auto min-w-[160px]"
-          >
-            <option value="all">All Status</option>
-            {STATUS_OPTIONS.map((status) => (
-              <option key={status} value={status}>{status}</option>
-            ))}
-          </select>
-        </div>
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="filter-dropdown"
+        >
+          <option value="all">All Status</option>
+          {STATUS_OPTIONS.map((status) => (
+            <option key={status} value={status}>{status}</option>
+          ))}
+        </select>
       </div>
 
       {filteredProjects.length > 0 ? (
