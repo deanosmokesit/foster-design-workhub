@@ -52,6 +52,7 @@
   "build": {
     "appId": "com.devhub.app",
     "productName": "Foster Design WorkHub",
+    "publish": null,
     "directories": {
       "output": "app"
     },
@@ -64,7 +65,7 @@
     "win": {
       "target": [
         {
-          "target": "nsis",
+          "target": "dir",
           "arch": [
             "x64"
           ]
