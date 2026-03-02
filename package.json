@@ -54,6 +54,7 @@
     "appId": "com.devhub.app",
     "productName": "Foster Design WorkHub",
     "publish": null,
+    "npmRebuild": true,
     "directories": {
       "output": "app"
     },
