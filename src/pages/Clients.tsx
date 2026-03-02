@@ -163,10 +163,10 @@ export default function Clients() {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8">
+      <div className="page-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <div>
           <h1 className="page-title">Organisations</h1>
-          <p className="text-slate-500 mt-4 text-lg">Manage your client relationships</p>
+          <p className="page-subtitle">Manage your client relationships</p>
         </div>
         <button
           onClick={() => {
@@ -182,20 +182,20 @@ export default function Clients() {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+        <div className="search-bar flex-1">
+          <Search className="w-5 h-5 text-slate-400" />
           <input
             type="text"
             placeholder="Search organisations..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="input pl-14"
+            className="search-bar-input"
           />
         </div>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="input w-auto min-w-[160px]"
+          className="filter-dropdown"
         >
           <option value="all">All Status</option>
           <option value="Active">Active</option>
@@ -297,20 +297,22 @@ export default function Clients() {
           })}
         </div>
       ) : (
-        <div className="glass-card p-16 text-center">
-          <div className="w-20 h-20 bg-slate-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
-            <Building2 className="w-10 h-10 text-slate-300" />
+        <div className="card">
+          <div className="empty-state">
+            <Building2 className="empty-state-icon" />
+            <p className="empty-state-title">No organisations found</p>
+            <p className="empty-state-subtitle">Add your first organisation to get started</p>
+            <button
+              onClick={() => {
+                resetForm();
+                setShowModal(true);
+              }}
+              className="btn btn-primary mt-6"
+            >
+              <Plus className="w-5 h-5" />
+              Add Organisation
+            </button>
           </div>
-          <p className="text-xl text-slate-500">No organisations found</p>
-          <button
-            onClick={() => {
-              resetForm();
-              setShowModal(true);
-            }}
-            className="mt-6 text-blue-500 hover:text-blue-600 text-lg font-medium"
-          >
-            Add your first organisation
-          </button>
         </div>
       )}
 

@@ -112,54 +112,54 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="flex flex-col w-full gap-12 dashboard-content">
+    <div className="flex flex-col w-full gap-12">
       {/* Header Row */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+      <div className="page-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-bold text-slate-900">Dashboard</h1>
-          <p className="text-slate-500 mt-3 text-lg">Welcome back! Here's your business overview.</p>
+          <h1 className="page-title">Dashboard</h1>
+          <p className="page-subtitle">Welcome back! Here's your business overview.</p>
         </div>
         <Link
           to="/clients"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-xl font-medium hover:bg-blue-600 transition-colors"
+          className="btn btn-primary"
         >
           <Plus className="w-5 h-5" />
           Add Organisation
         </Link>
       </div>
 
-      {/* Stats Cards Row - 4 columns, 24px gap, generous internal padding */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Stats Cards Row */}
+      <div className="stats-grid">
         {statCards.map((card, index) => (
           <Link
             key={card.label}
             to={card.link}
-            className="bg-white rounded-2xl p-6 pb-8 shadow-sm border border-slate-200 hover:shadow-md transition-shadow dashboard-stat-card"
+            className="stat-card"
           >
-            <div className="flex items-start justify-between mb-5">
+            <div className="flex items-start justify-between mb-4">
               <div className={`p-4 rounded-2xl bg-gradient-to-br ${card.color}`}>
                 <card.icon className="w-5 h-5 text-white" />
               </div>
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-semibold">
+              <span className="stat-card-change text-emerald-600">
                 <ArrowUpRight className="w-3 h-3" />
                 {card.trend}
               </span>
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-500">{card.label}</p>
-              <p className="text-3xl font-bold text-slate-900 mt-3">{card.value}</p>
+              <p className="stat-card-label">{card.label}</p>
+              <p className="stat-card-value">{card.value}</p>
             </div>
           </Link>
         ))}
       </div>
 
-      {/* Main Content Row - 2 columns, 24px gap, generous internal padding */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white rounded-2xl p-8 pb-10 shadow-sm border border-slate-200 dashboard-content-card">
-          <div className="flex items-center justify-between mb-8">
+      {/* Main Content Row */}
+      <div className="two-column-grid">
+        <div className="card">
+          <div className="card-header flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-slate-900">Project Status</h2>
-              <p className="text-sm text-slate-500 mt-1">Overview of all projects</p>
+              <h2 className="card-title">Project Status</h2>
+              <p className="card-subtitle">Overview of all projects</p>
             </div>
             <div className="p-3 bg-blue-50 rounded-xl">
               <TrendingUp className="w-5 h-5 text-blue-600" />
@@ -181,18 +181,19 @@ export default function Dashboard() {
               </ResponsiveContainer>
             </div>
           ) : (
-            <div className="h-64 flex flex-col items-center justify-center text-slate-400">
-              <FolderKanban className="w-10 h-10 mb-2" />
-              <p className="text-slate-500">No projects yet</p>
+            <div className="empty-state h-64">
+              <FolderKanban className="empty-state-icon" />
+              <p className="empty-state-title">No projects yet</p>
+              <p className="empty-state-subtitle">Create your first project to get started</p>
             </div>
           )}
         </div>
 
-        <div className="bg-white rounded-2xl p-8 pb-10 shadow-sm border border-slate-200 dashboard-content-card">
-          <div className="flex items-center justify-between mb-8">
+        <div className="card">
+          <div className="card-header flex items-center justify-between">
             <div>
-              <h2 className="text-xl font-semibold text-slate-900">Recent Activity</h2>
-              <p className="text-sm text-slate-500 mt-1">Latest updates</p>
+              <h2 className="card-title">Recent Activity</h2>
+              <p className="card-subtitle">Latest updates</p>
             </div>
             <div className="p-3 bg-violet-50 rounded-xl">
               <Activity className="w-5 h-5 text-violet-600" />
@@ -201,14 +202,14 @@ export default function Dashboard() {
           {activity.length > 0 ? (
             <div className="space-y-1">
               {activity.slice(0, 5).map((item, index) => (
-                <div key={item.id} className="flex items-start gap-4 p-4 rounded-xl hover:bg-slate-50 -mx-3">
+                <div key={item.id} className="flex items-start gap-4 p-3 rounded-lg hover:bg-slate-50 -mx-2">
                   <div 
-                    className="w-2 h-2 rounded-full mt-2.5 shrink-0"
+                    className="w-2 h-2 rounded-full mt-2 shrink-0"
                     style={{ backgroundColor: ACTIVITY_COLORS[index % ACTIVITY_COLORS.length] }}
                   />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-slate-700 truncate">{item.details}</p>
-                    <p className="text-xs text-slate-400 mt-1.5">
+                    <p className="text-xs text-slate-400 mt-1">
                       {format(new Date(item.created_at), 'MMM d, h:mm a')}
                     </p>
                   </div>
@@ -216,41 +217,42 @@ export default function Dashboard() {
               ))}
             </div>
           ) : (
-            <div className="h-56 flex flex-col items-center justify-center text-slate-400">
-              <Clock className="w-10 h-10 mb-3" />
-              <p className="text-slate-500">No recent activity</p>
+            <div className="empty-state h-48">
+              <Clock className="empty-state-icon" />
+              <p className="empty-state-title">No recent activity</p>
+              <p className="empty-state-subtitle">Activity will appear here as you work</p>
             </div>
           )}
         </div>
       </div>
 
-      {/* Action Buttons Row - 3 columns, 20px gap, generous internal padding */}
+      {/* Action Buttons Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <Link to="/projects" className="bg-white rounded-2xl p-7 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center gap-5 dashboard-action-button">
-          <div className="p-4 bg-amber-50 rounded-xl shrink-0">
+        <Link to="/projects" className="action-card">
+          <div className="p-4 bg-amber-50 rounded-xl action-card-icon">
             <FolderKanban className="w-6 h-6 text-amber-500" />
           </div>
-          <div>
-            <p className="font-semibold text-slate-900">New Project</p>
-            <p className="text-sm text-slate-500 mt-1">Start a new project</p>
+          <div className="action-card-content">
+            <h3>New Project</h3>
+            <p>Start a new project</p>
           </div>
         </Link>
-        <Link to="/tasks" className="bg-white rounded-2xl p-7 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center gap-5 dashboard-action-button">
-          <div className="p-4 bg-purple-50 rounded-xl shrink-0">
+        <Link to="/tasks" className="action-card">
+          <div className="p-4 bg-purple-50 rounded-xl action-card-icon">
             <CheckSquare className="w-6 h-6 text-purple-500" />
           </div>
-          <div>
-            <p className="font-semibold text-slate-900">New Task</p>
-            <p className="text-sm text-slate-500 mt-1">Create a new task</p>
+          <div className="action-card-content">
+            <h3>New Task</h3>
+            <p>Create a new task</p>
           </div>
         </Link>
-        <Link to="/settings" className="bg-white rounded-2xl p-7 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center gap-5 dashboard-action-button">
-          <div className="p-4 bg-emerald-50 rounded-xl shrink-0">
+        <Link to="/settings" className="action-card">
+          <div className="p-4 bg-emerald-50 rounded-xl action-card-icon">
             <Download className="w-6 h-6 text-emerald-500" />
           </div>
-          <div>
-            <p className="font-semibold text-slate-900">Export Data</p>
-            <p className="text-sm text-slate-500 mt-1">Backup your data</p>
+          <div className="action-card-content">
+            <h3>Export Data</h3>
+            <p>Backup your data</p>
           </div>
         </Link>
       </div>
