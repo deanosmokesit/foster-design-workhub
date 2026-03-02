@@ -112,8 +112,8 @@ export default function Dashboard() {
   ];
 
   return (
-    <>
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8">
+    <div className="space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <div>
           <h1 className="text-4xl font-bold text-slate-900">Dashboard</h1>
           <p className="text-slate-500 mt-2 text-lg">Welcome back! Here's your business overview.</p>
@@ -138,25 +138,25 @@ export default function Dashboard() {
               <div className={`p-4 rounded-2xl bg-gradient-to-br ${card.color}`}>
                 <card.icon className="w-5 h-5 text-white" />
               </div>
-              <div className="flex items-center gap-1 px-2 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-semibold">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-semibold">
                 <ArrowUpRight className="w-3 h-3" />
                 {card.trend}
-              </div>
+              </span>
             </div>
             <div>
               <p className="text-sm font-medium text-slate-500">{card.label}</p>
-              <p className="text-2xl font-bold text-slate-900 mt-1">{card.value}</p>
+              <p className="text-3xl font-bold text-slate-900 mt-2">{card.value}</p>
             </div>
           </Link>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
-          <div className="flex items-center justify-between mb-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-xl font-semibold text-slate-900">Project Status</h2>
-              <p className="text-sm text-slate-500">Overview of all projects</p>
+              <p className="text-sm text-slate-500 mt-1">Overview of all projects</p>
             </div>
             <div className="p-3 bg-blue-50 rounded-xl">
               <TrendingUp className="w-5 h-5 text-blue-600" />
@@ -185,27 +185,27 @@ export default function Dashboard() {
           )}
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
-          <div className="flex items-center justify-between mb-4">
+        <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-xl font-semibold text-slate-900">Recent Activity</h2>
-              <p className="text-sm text-slate-500">Latest updates</p>
+              <p className="text-sm text-slate-500 mt-1">Latest updates</p>
             </div>
             <div className="p-3 bg-violet-50 rounded-xl">
               <Activity className="w-5 h-5 text-violet-600" />
             </div>
           </div>
           {activity.length > 0 ? (
-            <div className="space-y-3">
+            <div className="space-y-1">
               {activity.slice(0, 5).map((item, index) => (
-                <div key={item.id} className="flex items-start gap-3 p-3 rounded-xl hover:bg-slate-50">
+                <div key={item.id} className="flex items-start gap-4 p-3 rounded-xl hover:bg-slate-50 -mx-2">
                   <div 
-                    className="w-2 h-2 rounded-full mt-2"
+                    className="w-2 h-2 rounded-full mt-2.5 shrink-0"
                     style={{ backgroundColor: ACTIVITY_COLORS[index % ACTIVITY_COLORS.length] }}
                   />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-slate-700 truncate">{item.details}</p>
-                    <p className="text-xs text-slate-400 mt-0.5">
+                    <p className="text-xs text-slate-400 mt-1">
                       {format(new Date(item.created_at), 'MMM d, h:mm a')}
                     </p>
                   </div>
@@ -222,8 +222,8 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <Link to="/projects" className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center gap-4">
-          <div className="p-4 bg-amber-50 rounded-xl">
+        <Link to="/projects" className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center gap-5">
+          <div className="p-4 bg-amber-50 rounded-xl shrink-0">
             <FolderKanban className="w-6 h-6 text-amber-500" />
           </div>
           <div>
@@ -231,8 +231,8 @@ export default function Dashboard() {
             <p className="text-sm text-slate-500">Start a new project</p>
           </div>
         </Link>
-        <Link to="/tasks" className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center gap-4">
-          <div className="p-4 bg-purple-50 rounded-xl">
+        <Link to="/tasks" className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center gap-5">
+          <div className="p-4 bg-purple-50 rounded-xl shrink-0">
             <CheckSquare className="w-6 h-6 text-purple-500" />
           </div>
           <div>
@@ -240,8 +240,8 @@ export default function Dashboard() {
             <p className="text-sm text-slate-500">Create a new task</p>
           </div>
         </Link>
-        <Link to="/settings" className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center gap-4">
-          <div className="p-4 bg-emerald-50 rounded-xl">
+        <Link to="/settings" className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center gap-5">
+          <div className="p-4 bg-emerald-50 rounded-xl shrink-0">
             <Download className="w-6 h-6 text-emerald-500" />
           </div>
           <div>
@@ -250,6 +250,6 @@ export default function Dashboard() {
           </div>
         </Link>
       </div>
-    </>
+    </div>
   );
 }
