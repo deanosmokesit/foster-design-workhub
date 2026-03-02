@@ -62,7 +62,7 @@ export default function Layout() {
       </aside>
 
       <main className="flex-1 flex flex-col overflow-hidden">
-        <header className="header px-12 py-6 flex items-center justify-between">
+        <header className="header px-8 lg:px-10 py-5 flex items-center justify-between">
           <div className="flex items-center gap-6">
             <h2 className="text-2xl font-bold text-slate-800">
               {navigation.find(item => item.path === location.pathname)?.name || 'DevHub'}
@@ -79,8 +79,8 @@ export default function Layout() {
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto px-12 py-8">
-          <div className="max-w-[1400px] mx-auto space-y-10">
+        <div className="flex-1 overflow-y-auto p-8 lg:p-10">
+          <div className="w-full">
             <Outlet />
           </div>
         </div>

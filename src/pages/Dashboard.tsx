@@ -112,7 +112,8 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="flex flex-col w-full gap-10">
+      {/* Header Row */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <div>
           <h1 className="text-4xl font-bold text-slate-900">Dashboard</h1>
@@ -127,6 +128,7 @@ export default function Dashboard() {
         </Link>
       </div>
 
+      {/* Stats Cards Row - 4 columns, 24px gap */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((card, index) => (
           <Link
@@ -151,7 +153,8 @@ export default function Dashboard() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* Main Content Row - 2 columns, 24px gap */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -221,7 +224,8 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      {/* Action Buttons Row - 3 columns, 20px gap */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
         <Link to="/projects" className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center gap-5">
           <div className="p-4 bg-amber-50 rounded-xl shrink-0">
             <FolderKanban className="w-6 h-6 text-amber-500" />
