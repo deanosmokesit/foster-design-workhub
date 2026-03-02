@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     
     steps:
       - name: Checkout code
@@ -32,10 +32,3 @@ jobs:
         with:
           name: electron-app
           path: app/win-unpacked/
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: app/win-unpacked/*.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
