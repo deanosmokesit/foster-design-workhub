@@ -12,7 +12,17 @@ async function initDatabase() {
   dbPath = path.join(userDataPath, 'foster-design.db');
   console.log('Database path:', dbPath);
 
-  const SQL = await initSqlJs();
+  let wasmPath;
+  if (app.isPackaged) {
+    wasmPath = path.join(process.resourcesPath, 'sql-wasm.wasm');
+  } else {
+    wasmPath = path.join(__dirname, '../node_modules/sql.js/dist/sql-wasm.wasm');
+  }
+  console.log('WASM path:', wasmPath);
+
+  const SQL = await initSqlJs({
+    locateFile: () => wasmPath
+  });
   
   let fileBuffer = null;
   if (fs.existsSync(dbPath)) {
@@ -148,6 +158,7 @@ function createWindow() {
     mainWindow.webContents.openDevTools();
   } else {
     const indexPath = path.join(__dirname, '../dist/index.html');
+    console.log('Loading index from:', indexPath);
     mainWindow.loadFile(indexPath);
   }
 
