@@ -20,6 +20,7 @@
   "author": "Foster Design",
   "license": "MIT",
   "devDependencies": {
+    "@electron/rebuild": "^4.0.3",
     "@tailwindcss/postcss": "^4.2.1",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^25.3.0",
@@ -62,6 +63,9 @@
       "node_modules/**/*",
       "package.json"
     ],
+    "asarUnpack": [
+      "node_modules/better-sqlite3/**/*"
+    ],
     "win": {
       "target": [
         {
@@ -80,10 +84,6 @@
       "uninstallerIcon": "build/icon.png"
     },
     "extraResources": [
-      {
-        "from": "node_modules/better-sqlite3/build/Release/better_sqlite3.node",
-        "to": "better_sqlite3.node"
-      },
       {
         "from": "build/icon.png",
         "to": "icon.png"
