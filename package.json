@@ -1,7 +1,6 @@
 {
   "name": "devhub",
   "version": "1.0.0",
-  "type": "module",
   "description": "DevHub - Work Management App",
   "main": "electron/main.js",
   "scripts": {
