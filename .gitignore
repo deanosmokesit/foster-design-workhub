@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+
+# Don't track the built app folder - GitHub Actions will build it
+app/
