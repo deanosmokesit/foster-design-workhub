@@ -425,3 +425,20 @@ body {
   right: -200px;
   background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
 }
+
+.dashboard-content {
+  padding: 48px !important;
+}
+
+.dashboard-stat-card {
+  padding: 24px !important;
+}
+
+.dashboard-content-card {
+  padding: 32px !important;
+}
+
+.dashboard-action-button {
+  padding: 18px 24px !important;
+  gap: 12px !important;
+}

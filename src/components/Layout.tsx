@@ -79,7 +79,7 @@ export default function Layout() {
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto p-10 lg:p-12">
+        <div className="flex-1 overflow-y-auto p-10 lg:p-12 dashboard-content">
           <div className="w-full">
             <Outlet />
           </div>

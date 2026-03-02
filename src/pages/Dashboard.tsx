@@ -112,7 +112,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="flex flex-col w-full gap-12">
+    <div className="flex flex-col w-full gap-12 dashboard-content">
       {/* Header Row */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <div>
@@ -134,7 +134,7 @@ export default function Dashboard() {
           <Link
             key={card.label}
             to={card.link}
-            className="bg-white rounded-2xl p-6 pb-8 shadow-sm border border-slate-200 hover:shadow-md transition-shadow"
+            className="bg-white rounded-2xl p-6 pb-8 shadow-sm border border-slate-200 hover:shadow-md transition-shadow dashboard-stat-card"
           >
             <div className="flex items-start justify-between mb-5">
               <div className={`p-4 rounded-2xl bg-gradient-to-br ${card.color}`}>
@@ -155,7 +155,7 @@ export default function Dashboard() {
 
       {/* Main Content Row - 2 columns, 24px gap, generous internal padding */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white rounded-2xl p-8 pb-10 shadow-sm border border-slate-200">
+        <div className="lg:col-span-2 bg-white rounded-2xl p-8 pb-10 shadow-sm border border-slate-200 dashboard-content-card">
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-xl font-semibold text-slate-900">Project Status</h2>
@@ -188,7 +188,7 @@ export default function Dashboard() {
           )}
         </div>
 
-        <div className="bg-white rounded-2xl p-8 pb-10 shadow-sm border border-slate-200">
+        <div className="bg-white rounded-2xl p-8 pb-10 shadow-sm border border-slate-200 dashboard-content-card">
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-xl font-semibold text-slate-900">Recent Activity</h2>
@@ -226,7 +226,7 @@ export default function Dashboard() {
 
       {/* Action Buttons Row - 3 columns, 20px gap, generous internal padding */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <Link to="/projects" className="bg-white rounded-2xl p-7 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center gap-5">
+        <Link to="/projects" className="bg-white rounded-2xl p-7 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center gap-5 dashboard-action-button">
           <div className="p-4 bg-amber-50 rounded-xl shrink-0">
             <FolderKanban className="w-6 h-6 text-amber-500" />
           </div>
@@ -235,7 +235,7 @@ export default function Dashboard() {
             <p className="text-sm text-slate-500 mt-1">Start a new project</p>
           </div>
         </Link>
-        <Link to="/tasks" className="bg-white rounded-2xl p-7 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center gap-5">
+        <Link to="/tasks" className="bg-white rounded-2xl p-7 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center gap-5 dashboard-action-button">
           <div className="p-4 bg-purple-50 rounded-xl shrink-0">
             <CheckSquare className="w-6 h-6 text-purple-500" />
           </div>
@@ -244,7 +244,7 @@ export default function Dashboard() {
             <p className="text-sm text-slate-500 mt-1">Create a new task</p>
           </div>
         </Link>
-        <Link to="/settings" className="bg-white rounded-2xl p-7 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center gap-5">
+        <Link to="/settings" className="bg-white rounded-2xl p-7 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex items-center gap-5 dashboard-action-button">
           <div className="p-4 bg-emerald-50 rounded-xl shrink-0">
             <Download className="w-6 h-6 text-emerald-500" />
           </div>
