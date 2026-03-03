@@ -34,14 +34,14 @@ export default function Layout() {
           </div>
         </div>
 
-        <nav className="flex-1 px-6 py-8 space-y-2">
+        <nav className="flex-1 px-5 py-8 space-y-1">
           {navigation.map((item) => {
             const isActive = location.pathname === item.path;
             return (
               <NavLink
                 key={item.path}
                 to={item.path}
-                className={`nav-item flex items-center gap-4 px-6 py-3.5 rounded-xl font-medium text-base transition-all duration-200 ease-out ${isActive ? 'active bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30' : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'}`}
+                className={`nav-item flex items-center gap-4 px-5 py-3.5 rounded-xl font-medium text-base ${isActive ? 'active bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30' : 'text-slate-600'}`}
               >
                 <item.icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-slate-400'}`} />
                 <span>{item.name}</span>
@@ -50,10 +50,10 @@ export default function Layout() {
           })}
         </nav>
 
-        <div className="px-6 pb-6 border-t border-slate-200/60 pt-6">
-          <div className="flex items-center gap-2 px-4">
-            <Circle className="w-2.5 h-2.5 fill-emerald-500 text-emerald-500" />
-            <span className="text-sm font-medium text-slate-600">All systems operational</span>
+        <div className="sidebar-footer border-t border-slate-200/60">
+          <div className="status-banner">
+            <Circle className="w-4 h-4 status-banner-icon" />
+            <span className="font-medium">All systems operational</span>
           </div>
           <div className="mt-4 text-center">
             <p className="text-xs text-slate-400">version 1.0.0</p>
