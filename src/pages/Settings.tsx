@@ -54,123 +54,141 @@ export default function Settings() {
   ];
 
   return (
-    <div className="max-w-2xl">
+    <div className="page-container">
       <div className="page-header">
-        <h1 className="page-title">Settings</h1>
-        <p className="page-subtitle">Manage your app preferences</p>
-      </div>
-
-      <div className="card p-14">
-        <div className="flex items-center gap-8 mb-10">
-          <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-3xl">
-            <Monitor className="w-8 h-8 text-blue-600" />
-          </div>
-          <div>
-            <h2 className="section-title">Business Information</h2>
-            <p className="text-lg text-slate-500">Your business details</p>
-          </div>
-        </div>
-        
-        <div className="space-y-6">
-          <div className="flex justify-between py-6 border-b border-slate-100">
-            <span className="text-lg text-slate-600">Business Name</span>
-            <span className="font-semibold text-slate-900">Foster Design</span>
-          </div>
-          <div className="flex justify-between py-6 border-b border-slate-100">
-            <span className="text-lg text-slate-600">App Name</span>
-            <span className="font-semibold text-slate-900">DevHub</span>
-          </div>
-          <div className="flex justify-between py-6">
-            <span className="text-lg text-slate-600">Version</span>
-            <span className="font-semibold text-slate-900">1.0.0</span>
-          </div>
+        <div className="page-header-content">
+          <h1 className="page-title">Settings</h1>
+          <p className="page-subtitle">Manage your app preferences</p>
         </div>
       </div>
 
-      <div className="glass-card p-14">
-        <div className="flex items-center gap-8 mb-10">
-          <div className="p-6 bg-gradient-to-br from-purple-50 to-violet-100 rounded-3xl">
-            <Package className="w-8 h-8 text-purple-600" />
+      <div className="content-section">
+        <div className="card">
+          <div className="card-header">
+            <div className="flex items-center gap-8 mb-10">
+              <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-3xl">
+                <Monitor className="w-8 h-8 text-blue-600" />
+              </div>
+              <div>
+                <h2 className="card-title">Business Information</h2>
+                <p className="card-subtitle">Your business details</p>
+              </div>
+            </div>
           </div>
-          <div>
-            <h2 className="section-title">Service Categories</h2>
-            <p className="text-lg text-slate-500">Categories for your services</p>
+          
+          <div className="space-y-6">
+            <div className="flex justify-between py-6 border-b border-slate-100">
+              <span className="text-lg text-slate-600">Business Name</span>
+              <span className="font-semibold text-slate-900">Foster Design</span>
+            </div>
+            <div className="flex justify-between py-6 border-b border-slate-100">
+              <span className="text-lg text-slate-600">App Name</span>
+              <span className="font-semibold text-slate-900">DevHub</span>
+            </div>
+            <div className="flex justify-between py-6">
+              <span className="text-lg text-slate-600">Version</span>
+              <span className="font-semibold text-slate-900">1.0.0</span>
+            </div>
           </div>
         </div>
-        
-        <div className="flex flex-wrap gap-5">
-          {serviceCategories.map((category) => (
-            <span 
-              key={category}
-              className="px-6 py-3 bg-slate-100/70 text-slate-700 rounded-2xl text-lg font-medium"
+      </div>
+
+      <div className="content-section">
+        <div className="card">
+          <div className="card-header">
+            <div className="flex items-center gap-8 mb-10">
+              <div className="p-6 bg-gradient-to-br from-purple-50 to-violet-100 rounded-3xl">
+                <Package className="w-8 h-8 text-purple-600" />
+              </div>
+              <div>
+                <h2 className="card-title">Service Categories</h2>
+                <p className="card-subtitle">Categories for your services</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex flex-wrap gap-5">
+            {serviceCategories.map((category) => (
+              <span 
+                key={category}
+                className="px-6 py-3 bg-slate-100/70 text-slate-700 rounded-2xl text-lg font-medium"
+              >
+                {category}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="content-section">
+        <div className="card">
+          <div className="card-header">
+            <div className="flex items-center gap-8 mb-10">
+              <div className="p-6 bg-gradient-to-br from-emerald-50 to-teal-100 rounded-3xl">
+                <Database className="w-8 h-8 text-emerald-600" />
+              </div>
+              <div>
+                <h2 className="card-title">Data Management</h2>
+                <p className="card-subtitle">Export and backup your data</p>
+              </div>
+            </div>
+          </div>
+
+          {error && (
+            <div className="flex items-center gap-4 p-6 mb-8 bg-red-50 text-red-700 rounded-3xl">
+              <AlertCircle className="w-6 h-6" />
+              <span className="text-lg">{error}</span>
+            </div>
+          )}
+
+          {exportSuccess && (
+            <div className="flex items-center gap-4 p-6 mb-8 bg-emerald-50 text-emerald-700 rounded-3xl">
+              <CheckCircle className="w-6 h-6" />
+              <span className="text-lg">Data exported successfully!</span>
+            </div>
+          )}
+
+          <div className="border-t border-slate-100 pt-8">
+            <button
+              onClick={handleExport}
+              disabled={exporting}
+              className="btn btn-primary"
             >
-              {category}
-            </span>
-          ))}
+              <Download className="w-5 h-5" />
+              {exporting ? 'Exporting...' : 'Export All Data'}
+            </button>
+            <p className="mt-5 text-base text-slate-400">
+              Downloads all your clients, projects, tasks, and activity history as a JSON file.
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="glass-card p-14">
-        <div className="flex items-center gap-8 mb-10">
-          <div className="p-6 bg-gradient-to-br from-emerald-50 to-teal-100 rounded-3xl">
-            <Database className="w-8 h-8 text-emerald-600" />
+      <div className="content-section">
+        <div className="card">
+          <div className="card-header">
+            <div className="flex items-center gap-8 mb-8">
+              <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-3xl">
+                <Info className="w-8 h-8 text-blue-600" />
+              </div>
+              <div>
+                <h2 className="card-title">About DevHub</h2>
+              </div>
+            </div>
           </div>
-          <div>
-            <h2 className="section-title">Data Management</h2>
-            <p className="text-lg text-slate-500">Export and backup your data</p>
-          </div>
-        </div>
-
-        {error && (
-          <div className="flex items-center gap-4 p-6 mb-8 bg-red-50 text-red-700 rounded-3xl">
-            <AlertCircle className="w-6 h-6" />
-            <span className="text-lg">{error}</span>
-          </div>
-        )}
-
-        {exportSuccess && (
-          <div className="flex items-center gap-4 p-6 mb-8 bg-emerald-50 text-emerald-700 rounded-3xl">
-            <CheckCircle className="w-6 h-6" />
-            <span className="text-lg">Data exported successfully!</span>
-          </div>
-        )}
-
-        <div className="border-t border-slate-100 pt-8">
-          <button
-            onClick={handleExport}
-            disabled={exporting}
-            className="btn btn-primary"
-          >
-            <Download className="w-5 h-5" />
-            {exporting ? 'Exporting...' : 'Export All Data'}
-          </button>
-          <p className="mt-5 text-base text-slate-400">
-            Downloads all your clients, projects, tasks, and activity history as a JSON file.
+          <p className="text-lg text-slate-600 leading-relaxed">
+            DevHub is a custom-built work management application designed specifically for IT service businesses. 
+            It helps you manage clients, projects, and tasks efficiently - all in one place.
           </p>
-        </div>
-      </div>
-
-      <div className="glass-card p-14">
-        <div className="flex items-center gap-8 mb-8">
-          <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-3xl">
-            <Info className="w-8 h-8 text-blue-600" />
-          </div>
-          <div>
-            <h2 className="section-title">About DevHub</h2>
-          </div>
-        </div>
-        <p className="text-lg text-slate-600 leading-relaxed">
-          DevHub is a custom-built work management application designed specifically for IT service businesses. 
-          It helps you manage clients, projects, and tasks efficiently - all in one place.
-        </p>
-        <p className="text-lg text-slate-600 leading-relaxed mt-6">
-          Built for IT professionals handling AI, Automation, IT Infrastructure, Microsoft Products, 
-          IT Consultancy, Website Design, and Software Development services.
-        </p>
-        <div className="mt-10 pt-10 border-t border-slate-100">
-          <p className="text-base text-slate-400">
-            © 2026 DevHub. All rights reserved.
+          <p className="text-lg text-slate-600 leading-relaxed mt-6">
+            Built for IT professionals handling AI, Automation, IT Infrastructure, Microsoft Products, 
+            IT Consultancy, Website Design, and Software Development services.
           </p>
+          <div className="mt-10 pt-10 border-t border-slate-100">
+            <p className="text-base text-slate-400">
+              © 2026 DevHub. All rights reserved.
+            </p>
+          </div>
         </div>
       </div>
     </div>

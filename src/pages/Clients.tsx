@@ -25,10 +25,10 @@ const SERVICE_CATEGORIES = [
   'Software Development',
 ];
 
-const STATUS_STYLES: Record<string, { bg: string; text: string; dot: string }> = {
-  Active: { bg: 'bg-emerald-100/70', text: 'text-emerald-700', dot: 'bg-emerald-500' },
-  Inactive: { bg: 'bg-slate-100/70', text: 'text-slate-600', dot: 'bg-slate-400' },
-  Prospect: { bg: 'bg-blue-100/70', text: 'text-blue-700', dot: 'bg-blue-500' },
+const STATUS_STYLES: Record<string, string> = {
+  Active: 'badge-success',
+  Inactive: 'badge-default',
+  Prospect: 'badge-info',
 };
 
 export default function Clients() {
@@ -163,145 +163,129 @@ export default function Clients() {
 
   return (
     <>
-      <div className="page-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-        <div>
-          <h1 className="page-title">Organisations</h1>
-          <p className="page-subtitle">Manage your client relationships</p>
+      <div className="page-container">
+        <div className="page-header">
+          <div className="page-header-content">
+            <h1 className="page-title">Organisations</h1>
+            <p className="page-subtitle">Manage your client relationships</p>
+          </div>
+          <button
+            onClick={() => {
+              resetForm();
+              setEditingClient(null);
+              setShowModal(true);
+            }}
+            className="btn btn-primary"
+          >
+            <Plus className="w-5 h-5" />
+            Add Organisation
+          </button>
         </div>
-        <button
-          onClick={() => {
-            resetForm();
-            setEditingClient(null);
-            setShowModal(true);
-          }}
-          className="btn btn-primary"
-        >
-          <Plus className="w-5 h-5" />
-          Add Organisation
-        </button>
-      </div>
 
-      <div className="flex flex-col sm:flex-row gap-6">
-        <div className="search-bar flex-1">
-          <Search className="w-5 h-5 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search organisations..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-bar-input"
-          />
+        <div className="filter-bar">
+          <div className="search-wrapper">
+            <Search className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search organisations..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+          </div>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Status</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+            <option value="Prospect">Prospect</option>
+          </select>
         </div>
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="filter-dropdown"
-        >
-          <option value="all">All Status</option>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-          <option value="Prospect">Prospect</option>
-        </select>
-      </div>
 
-      {filteredClients.length > 0 ? (
-        <div className="grid gap-8">
-          {filteredClients.map((client) => {
-            const statusStyle = STATUS_STYLES[client.status] || { bg: 'bg-slate-100/70', text: 'text-slate-600', dot: 'bg-slate-400' };
-            const initials = client.company_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
-            
-            return (
-              <div
-                key={client.id}
-                className="glass-card p-10 group"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
-                  <div className="flex items-start gap-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-50 to-indigo-100/50 rounded-3xl flex items-center justify-center flex-shrink-0 text-blue-600 font-bold text-lg group-hover:scale-105 transition-transform">
-                      {initials}
+        {filteredClients.length > 0 ? (
+          <div className="content-section">
+            {filteredClients.map((client) => {
+              const badgeClass = STATUS_STYLES[client.status] || 'badge-default';
+              const initials = client.company_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+              
+              return (
+                <div key={client.id} className="list-item-card">
+                  <div className="list-item-avatar">
+                    {initials}
+                  </div>
+                  <div className="list-item-content">
+                    <div className="list-item-header">
+                      <span className="list-item-title">{client.company_name}</span>
+                      <span className={`badge ${badgeClass}`}>
+                        {client.status}
+                      </span>
                     </div>
-                    <div>
-                      <div className="flex items-center gap-3">
-                        <h3 className="text-xl font-semibold text-slate-900">{client.company_name}</h3>
-                        <div className="flex items-center gap-2">
-                          <span className={`w-2.5 h-2.5 rounded-full ${statusStyle.dot}`} />
-                          <span className={`badge ${statusStyle.bg} ${statusStyle.text}`}>
-                            {client.status}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 mt-2 text-base text-slate-500">
-                        <User className="w-5 h-5" />
+                    <div className="list-item-meta">
+                      <div className="list-item-meta-row">
+                        <User className="w-4 h-4" />
                         {client.contact_name}
                       </div>
-                      <div className="flex flex-wrap gap-x-6 gap-y-3 mt-4 text-base text-slate-500">
-                        <div className="flex items-center gap-2">
-                          <Mail className="w-5 h-5" />
-                          {client.email}
+                      <div className="list-item-meta-row">
+                        <Mail className="w-4 h-4" />
+                        {client.email}
+                      </div>
+                      {client.phone && (
+                        <div className="list-item-meta-row">
+                          <Phone className="w-4 h-4" />
+                          {client.phone}
                         </div>
-                        {client.phone && (
-                          <div className="flex items-center gap-2">
-                            <Phone className="w-5 h-5" />
-                            {client.phone}
-                          </div>
-                        )}
-                        {client.website && (
+                      )}
+                      {client.website && (
+                        <div className="list-item-meta-row">
+                          <Globe className="w-4 h-4" />
                           <a 
                             href={client.website} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-blue-500 hover:text-blue-600"
+                            className="text-blue-500 hover:text-blue-600 flex items-center gap-1"
                           >
-                            <Globe className="w-5 h-5" />
                             {client.website.replace(/^https?:\/\//, '')}
-                            <ExternalLink className="w-4 h-4" />
+                            <ExternalLink className="w-3 h-3" />
                           </a>
-                        )}
-                      </div>
-                      {client.service_categories && (
-                        <div className="flex flex-wrap gap-3 mt-5">
-                          {JSON.parse(client.service_categories || '[]').map((cat: string) => (
-                            <span key={cat} className="px-4 py-2 bg-slate-100/60 text-slate-600 rounded-xl text-base font-medium">
-                              {cat}
-                            </span>
-                          ))}
                         </div>
                       )}
                     </div>
+                    {client.service_categories && (
+                      <div className="list-item-tags">
+                        {JSON.parse(client.service_categories || '[]').map((cat: string) => (
+                          <span key={cat} className="tag">
+                            {cat}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  <div className="flex items-center gap-2 sm:flex-shrink-0">
+                  <div className="list-item-actions">
                     <button
                       onClick={() => openEditModal(client)}
-                      className="p-4 text-slate-400 hover:text-blue-600 hover:bg-blue-50/50 rounded-2xl transition-colors"
+                      className="icon-button"
                     >
                       <Edit2 className="w-5 h-5" />
                     </button>
                     <button
                       onClick={() => setShowDeleteConfirm(client.id!)}
-                      className="p-4 text-slate-400 hover:text-red-600 hover:bg-red-50/50 rounded-2xl transition-colors"
+                      className="icon-button"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
                 </div>
-                {client.notes && (
-                  <p className="mt-6 pt-6 border-t border-slate-100/50 text-base text-slate-500 line-clamp-2">
-                    {client.notes}
-                  </p>
-                )}
-                <p className="mt-5 text-sm text-slate-400">
-                  Added {format(new Date(client.created_at || ''), 'MMM d, yyyy')}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <div className="card">
+              );
+            })}
+          </div>
+        ) : (
           <div className="empty-state">
             <Building2 className="empty-state-icon" />
             <p className="empty-state-title">No organisations found</p>
-            <p className="empty-state-subtitle">Add your first organisation to get started</p>
+            <p className="empty-state-description">Add your first organisation to get started</p>
             <button
               onClick={() => {
                 resetForm();
@@ -313,8 +297,8 @@ export default function Clients() {
               Add Organisation
             </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       {showModal && (
         <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-6">
@@ -517,3 +501,4 @@ export default function Clients() {
       </>
     );
   }
+}

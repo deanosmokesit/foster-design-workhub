@@ -32,6 +32,14 @@ const PRIORITY_STYLES: Record<string, { bg: string; text: string; dot: string }>
   'Urgent': { bg: 'bg-red-100 text-red-700', text: 'text-red-700', dot: 'bg-red-500' },
 };
 
+const BADGE_MAP: Record<string, string> = {
+  'Todo': 'badge badge-info',
+  'In Progress': 'badge badge-warning',
+  'Review': 'badge badge-warning',
+  'Done': 'badge badge-success',
+  'Cancelled': 'badge badge-default',
+};
+
 export default function Tasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -170,9 +178,9 @@ export default function Tasks() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-80">
-        <div className="relative">
-          <div className="w-10 h-10 border-3 border-blue-200 border-t-blue-500 rounded-full animate-spin" />
+      <div className="page-container">
+        <div className="loading-state">
+          <div className="loading-spinner" />
         </div>
       </div>
     );
@@ -180,132 +188,137 @@ export default function Tasks() {
 
   return (
     <>
-      <div className="page-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-        <div>
-          <h1 className="page-title">Tasks</h1>
-          <p className="page-subtitle">Manage your work tasks</p>
+      <div className="page-container">
+        <div className="page-header">
+          <div className="page-header-content">
+            <h1 className="page-title">Tasks</h1>
+            <p className="page-subtitle">Manage your work tasks</p>
+          </div>
+          <button
+            onClick={() => {
+              resetForm();
+              setEditingTask(null);
+              setShowModal(true);
+            }}
+            className="btn btn-primary"
+          >
+            <Plus className="w-5 h-5" />
+            New Task
+          </button>
         </div>
-        <button
-          onClick={() => {
-            resetForm();
-            setEditingTask(null);
-            setShowModal(true);
-          }}
-          className="btn btn-primary"
-        >
-          <Plus className="w-5 h-5" />
-          New Task
-        </button>
-      </div>
 
-      <div className="flex flex-col sm:flex-row gap-6">
-        <div className="search-bar flex-1">
-          <Search className="w-5 h-5 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search tasks..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-bar-input"
-          />
+        <div className="filter-bar">
+          <div className="search-wrapper">
+            <Search className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search tasks..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+          </div>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Status</option>
+            {STATUS_OPTIONS.map((status) => (
+              <option key={status} value={status}>{status}</option>
+            ))}
+          </select>
+          <select
+            value={priorityFilter}
+            onChange={(e) => setPriorityFilter(e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Priority</option>
+            {PRIORITY_OPTIONS.map((priority) => (
+              <option key={priority} value={priority}>{priority}</option>
+            ))}
+          </select>
         </div>
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="filter-dropdown"
-        >
-          <option value="all">All Status</option>
-          {STATUS_OPTIONS.map((status) => (
-            <option key={status} value={status}>{status}</option>
-          ))}
-        </select>
-        <select
-          value={priorityFilter}
-          onChange={(e) => setPriorityFilter(e.target.value)}
-          className="filter-dropdown"
-        >
-          <option value="all">All Priority</option>
-          {PRIORITY_OPTIONS.map((priority) => (
-            <option key={priority} value={priority}>{priority}</option>
-          ))}
-        </select>
-      </div>
 
-      {filteredTasks.length > 0 ? (
-        <div className="space-y-8">
-          {filteredTasks.map((task) => {
-            const statusStyle = STATUS_STYLES[task.status] || STATUS_STYLES['Todo'];
-            const priorityStyle = PRIORITY_STYLES[task.priority] || PRIORITY_STYLES['Medium'];
-            
-            return (
-              <div
-                key={task.id}
-                className={`glass-card ${statusStyle.bgFill || ''}`}
-              >
-                <div 
-                  className="flex items-start gap-8 p-8 cursor-pointer"
-                  onClick={() => setExpandedTask(expandedTask === task.id ? null : task.id!)}
+        {filteredTasks.length > 0 ? (
+          <div className="content-section">
+            {filteredTasks.map((task) => {
+              const statusStyle = STATUS_STYLES[task.status] || STATUS_STYLES['Todo'];
+              const priorityStyle = PRIORITY_STYLES[task.priority] || PRIORITY_STYLES['Medium'];
+              const badgeClass = BADGE_MAP[task.status] || 'badge badge-default';
+              
+              return (
+                <div
+                  key={task.id}
+                  className="list-item-card"
                 >
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      const nextStatus = {
-                        'Todo': 'In Progress',
-                        'In Progress': 'Review',
-                        'Review': 'Done',
-                        'Done': 'Todo',
-                      }[task.status] as string;
-                      handleStatusChange(task, nextStatus);
-                    }}
-                    className={`mt-2 w-8 h-8 rounded-2xl border-[3px] flex items-center justify-center flex-shrink-0 transition-all duration-200 ${
-                      task.status === 'Done' 
-                        ? 'bg-emerald-500 border-emerald-500 text-white' 
-                        : 'border-slate-300 hover:border-blue-500 hover:bg-blue-50'
-                    }`}
+                  <div 
+                    className="list-item-avatar"
+                    onClick={() => setExpandedTask(expandedTask === task.id ? null : task.id!)}
                   >
-                    {task.status === 'Done' && <CheckSquare className="w-5 h-5" />}
-                  </button>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-4 flex-wrap">
-                      <h3 className={`text-xl font-semibold text-slate-900 ${task.status === 'Done' ? 'line-through text-slate-400' : ''}`}>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const nextStatus = {
+                          'Todo': 'In Progress',
+                          'In Progress': 'Review',
+                          'Review': 'Done',
+                          'Done': 'Todo',
+                        }[task.status] as string;
+                        handleStatusChange(task, nextStatus);
+                      }}
+                      className={`checkbox ${
+                        task.status === 'Done' 
+                          ? 'checkbox-checked' 
+                          : 'checkbox-unchecked'
+                      }`}
+                    >
+                      {task.status === 'Done' && <CheckSquare className="w-5 h-5" />}
+                    </button>
+                  </div>
+                  <div 
+                    className="list-item-content"
+                    onClick={() => setExpandedTask(expandedTask === task.id ? null : task.id!)}
+                  >
+                    <div className="list-item-header">
+                      <span className={`list-item-title ${task.status === 'Done' ? 'line-through' : ''}`}>
                         {task.title}
-                      </h3>
-                      <span className={`px-5 py-2 rounded-2xl text-base font-medium ${statusStyle.bg}`}>
+                      </span>
+                      <span className={badgeClass}>
                         {task.status}
                       </span>
-                      <span className={`flex items-center gap-2 px-5 py-2 rounded-2xl text-base font-medium ${priorityStyle.bg}`}>
-                        <span className="w-2.5 h-2.5 rounded-full bg-current" />
+                      <span className={`badge ${priorityStyle.bg.replace('bg-', 'badge-')}`}>
                         {task.priority}
                       </span>
                     </div>
-                    <div className="flex flex-wrap gap-6 mt-5 text-base text-slate-500">
+                    <div className="list-item-meta">
                       {task.project_name && (
-                        <div className="flex items-center gap-2">
+                        <div className="list-item-meta-row">
                           <CheckSquare className="w-4 h-4" />
                           {task.project_name}
                         </div>
                       )}
                       {task.due_date && (
-                        <div className="flex items-center gap-2">
+                        <div className="list-item-meta-row">
                           <Calendar className="w-4 h-4" />
                           Due {format(new Date(task.due_date), 'MMM d')}
                         </div>
                       )}
                       {task.estimated_hours && (
-                        <div className="flex items-center gap-2">
+                        <div className="list-item-meta-row">
                           <Clock className="w-4 h-4" />
                           {task.estimated_hours}h
                         </div>
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 flex-shrink-0">
+                  <div className="list-item-actions">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         openEditModal(task);
                       }}
-                      className="p-4 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-2xl transition-colors"
+                      className="icon-button"
                     >
                       <Edit2 className="w-5 h-5" />
                     </button>
@@ -314,7 +327,7 @@ export default function Tasks() {
                         e.stopPropagation();
                         setShowDeleteConfirm(task.id!);
                       }}
-                      className="p-4 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-2xl transition-colors"
+                      className="icon-button"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>
@@ -325,54 +338,33 @@ export default function Tasks() {
                     )}
                   </div>
                 </div>
-                
-                {expandedTask === task.id && (
-                  <div className="px-8 pb-8 pt-0 pl-[5.5rem]">
-                    {task.description && (
-                      <p className="text-lg text-slate-600 mb-8 pb-8 border-b border-slate-200/50">{task.description}</p>
-                    )}
-                    {task.tags && (
-                      <div className="flex flex-wrap gap-4 mb-8">
-                        {JSON.parse(task.tags || '[]').map((tag: string) => (
-                          <span key={tag} className="px-5 py-2.5 bg-slate-100 text-slate-600 rounded-full text-base font-medium">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                    <div className="flex gap-10 text-base text-slate-400">
-                      <span>Created {format(new Date(task.created_at || ''), 'MMM d, yyyy')}</span>
-                      {task.assigned_to && <span>Assigned to: {task.assigned_to}</span>}
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <div className="glass-card p-16 text-center">
-          <div className="w-20 h-20 bg-slate-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
-            <CheckSquare className="w-10 h-10 text-slate-300" />
+              );
+            })}
           </div>
-          <p className="text-xl text-slate-500">No tasks found</p>
-          <button
-            onClick={() => {
-              resetForm();
-              setShowModal(true);
-            }}
-            className="mt-6 text-blue-500 hover:text-blue-600 text-lg font-medium"
-          >
-            Create your first task
-          </button>
-        </div>
-      )}
+        ) : (
+          <div className="empty-state">
+            <div className="empty-state-icon">
+              <CheckSquare className="w-10 h-10" />
+            </div>
+            <p className="empty-state-title">No tasks found</p>
+            <button
+              onClick={() => {
+                resetForm();
+                setShowModal(true);
+              }}
+              className="btn btn-primary"
+            >
+              Create your first task
+            </button>
+          </div>
+        )}
+      </div>
 
       {showModal && (
-        <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-6">
-          <div className="modal-content w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between p-8 border-b border-slate-100">
-              <h2 className="text-2xl font-semibold text-slate-900">
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h2 className="modal-title">
                 {editingTask ? 'Edit Task' : 'New Task'}
               </h2>
               <button
@@ -381,14 +373,14 @@ export default function Tasks() {
                   setEditingTask(null);
                   resetForm();
                 }}
-                className="p-4 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-2xl transition-colors"
+                className="icon-button"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
-            <form onSubmit={handleSubmit} className="p-8 space-y-8">
-              <div>
-                <label className="block text-base font-medium text-slate-600 mb-3">
+            <form onSubmit={handleSubmit} className="modal-body">
+              <div className="form-group">
+                <label className="form-label">
                   Title *
                 </label>
                 <input
@@ -396,31 +388,31 @@ export default function Tasks() {
                   required
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="input"
+                  className="form-input"
                   placeholder="What needs to be done?"
                 />
               </div>
-              <div>
-                <label className="block text-base font-medium text-slate-600 mb-3">
+              <div className="form-group">
+                <label className="form-label">
                   Description
                 </label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={4}
-                  className="input resize-none"
+                  className="form-textarea"
                   placeholder="Add more details..."
                 />
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-base font-medium text-slate-600 mb-3">
+              <div className="form-row">
+                <div className="form-group">
+                  <label className="form-label">
                     Project
                   </label>
                   <select
                     value={formData.project_id}
                     onChange={(e) => setFormData({ ...formData, project_id: Number(e.target.value) })}
-                    className="input"
+                    className="form-select"
                   >
                     <option value={0}>No project</option>
                     {projects.map((project) => (
@@ -430,82 +422,84 @@ export default function Tasks() {
                     ))}
                   </select>
                 </div>
-                <div>
-                  <label className="block text-base font-medium text-slate-600 mb-3">
+                <div className="form-group">
+                  <label className="form-label">
                     Status
                   </label>
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-                    className="input"
+                    className="form-select"
                   >
                     {STATUS_OPTIONS.map((status) => (
                       <option key={status} value={status}>{status}</option>
                     ))}
                   </select>
                 </div>
-                <div>
-                  <label className="block text-base font-medium text-slate-600 mb-3">
+                <div className="form-group">
+                  <label className="form-label">
                     Priority
                   </label>
                   <select
                     value={formData.priority}
                     onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
-                    className="input"
+                    className="form-select"
                   >
                     {PRIORITY_OPTIONS.map((priority) => (
                       <option key={priority} value={priority}>{priority}</option>
                     ))}
                   </select>
                 </div>
-                <div>
-                  <label className="block text-base font-medium text-slate-600 mb-3">
+              </div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label className="form-label">
                     Due Date
                   </label>
                   <input
                     type="date"
                     value={formData.due_date}
                     onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
-                    className="input"
+                    className="form-input"
                   />
                 </div>
-                <div>
-                  <label className="block text-base font-medium text-slate-600 mb-3">
+                <div className="form-group">
+                  <label className="form-label">
                     Estimated Hours
                   </label>
                   <input
                     type="number"
                     value={formData.estimated_hours}
                     onChange={(e) => setFormData({ ...formData, estimated_hours: e.target.value })}
-                    className="input"
+                    className="form-input"
                   />
                 </div>
-                <div>
-                  <label className="block text-base font-medium text-slate-600 mb-3">
+                <div className="form-group">
+                  <label className="form-label">
                     Assigned To
                   </label>
                   <input
                     type="text"
                     value={formData.assigned_to}
                     onChange={(e) => setFormData({ ...formData, assigned_to: e.target.value })}
-                    className="input"
+                    className="form-input"
                     placeholder="Who is responsible?"
                   />
                 </div>
               </div>
-              <div>
-                <label className="block text-base font-medium text-slate-600 mb-3">
+              <div className="form-group">
+                <label className="form-label">
                   Tags (comma separated)
                 </label>
                 <input
                   type="text"
                   value={formData.tags}
                   onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-                  className="input"
+                  className="form-input"
                   placeholder="e.g., frontend, bug, urgent"
                 />
               </div>
-              <div className="flex justify-end gap-4 pt-4">
+              <div className="modal-footer">
                 <button
                   type="button"
                   onClick={() => {
@@ -530,13 +524,13 @@ export default function Tasks() {
       )}
 
       {showDeleteConfirm && (
-        <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-6">
-          <div className="modal-content p-10 w-full max-w-md">
-            <h3 className="text-xl font-semibold text-slate-900 mb-3">Delete Task</h3>
-            <p className="text-base text-slate-500 mb-8">
+        <div className="modal-overlay">
+          <div className="modal modal-sm">
+            <h3 className="modal-title">Delete Task</h3>
+            <p className="modal-text">
               Are you sure you want to delete this task? This action cannot be undone.
             </p>
-            <div className="flex justify-end gap-4">
+            <div className="modal-footer">
               <button
                 onClick={() => setShowDeleteConfirm(null)}
                 className="btn btn-secondary"
@@ -545,14 +539,14 @@ export default function Tasks() {
               </button>
               <button
                 onClick={() => handleDelete(showDeleteConfirm)}
-                className="btn text-white bg-red-500 hover:bg-red-600"
+                className="btn btn-danger"
               >
                 Delete
               </button>
             </div>
-            </div>
           </div>
-        )}
-      </>
-    );
-  }
+        </div>
+      )}
+    </>
+  );
+}

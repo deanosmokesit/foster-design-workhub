@@ -10,6 +10,7 @@ import {
   TrendingUp,
   Download,
   ArrowUpRight,
+  ArrowDownRight,
   Activity
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
@@ -59,10 +60,12 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-[60vh]">
-        <div className="relative">
-          <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin" />
-          <div className="absolute inset-0 w-12 h-12 border-4 border-transparent border-t-indigo-400 rounded-full animate-spin" style={{ animationDuration: '1.5s' }} />
+      <div className="page-container">
+        <div className="flex items-center justify-center" style={{ height: '60vh' }}>
+          <div className="relative">
+            <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin" />
+            <div className="absolute inset-0 w-12 h-12 border-4 border-transparent border-t-indigo-400 rounded-full animate-spin" style={{ animationDuration: '1.5s' }} />
+          </div>
         </div>
       </div>
     );
@@ -73,188 +76,189 @@ export default function Dashboard() {
       label: 'Active Clients', 
       value: stats?.totalClients || 0, 
       icon: Users, 
-      color: 'from-blue-400 to-blue-600',
-      shadow: 'shadow-blue-500/20',
-      bgGradient: 'from-blue-50 to-blue-100/50',
+      color: '#3B82F6',
       link: '/clients',
-      trend: '+12%'
+      trend: '+12%',
+      positive: true
     },
     { 
       label: 'Active Projects', 
       value: stats?.activeProjects || 0, 
       icon: FolderKanban, 
-      color: 'from-amber-400 to-orange-500',
-      shadow: 'shadow-amber-500/20',
-      bgGradient: 'from-amber-50 to-amber-100/50',
+      color: '#F59E0B',
       link: '/projects',
-      trend: '+8%'
+      trend: '+8%',
+      positive: true
     },
     { 
       label: 'Pending Tasks', 
       value: stats?.pendingTasks || 0, 
       icon: CheckSquare, 
-      color: 'from-purple-400 to-violet-600',
-      shadow: 'shadow-purple-500/20',
-      bgGradient: 'from-purple-50 to-purple-100/50',
+      color: '#8B5CF6',
       link: '/tasks',
-      trend: '-5%'
+      trend: '-5%',
+      positive: false
     },
     { 
       label: 'Total Revenue', 
       value: `£${(stats?.totalRevenue || 0).toLocaleString()}`, 
       icon: Banknote, 
-      color: 'from-emerald-400 to-teal-500',
-      shadow: 'shadow-emerald-500/20',
-      bgGradient: 'from-emerald-50 to-emerald-100/50',
+      color: '#10B981',
       link: '/projects',
-      trend: '+23%'
+      trend: '+23%',
+      positive: true
     },
   ];
 
   return (
-    <div className="flex flex-col w-full gap-12">
-      {/* Header Row */}
-      <div className="page-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-        <div>
+    <div className="page-container">
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="page-header-content">
           <h1 className="page-title">Dashboard</h1>
           <p className="page-subtitle">Welcome back! Here's your business overview.</p>
         </div>
-        <Link
-          to="/clients"
-          className="btn btn-primary"
-        >
-          <Plus className="w-5 h-5" />
+        <Link to="/clients" className="btn btn-primary">
+          <Plus className="btn-icon" />
           Add Organisation
         </Link>
       </div>
 
-      {/* Stats Cards Row */}
-      <div className="stats-grid">
-        {statCards.map((card, index) => (
-          <Link
-            key={card.label}
-            to={card.link}
-            className="stat-card"
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div className={`p-4 rounded-2xl bg-gradient-to-br ${card.color}`}>
-                <card.icon className="w-5 h-5 text-white" />
+      {/* Stats Row */}
+      <div className="content-section">
+        <div className="stats-grid">
+          {statCards.map((card) => (
+            <Link key={card.label} to={card.link} className="stat-card">
+              <div className="stat-card-header">
+                <div className="stat-card-icon-wrapper" style={{ background: card.color }}>
+                  <card.icon className="stat-card-icon" />
+                </div>
+                <span className={`stat-card-change ${card.positive ? 'positive' : 'negative'}`}>
+                  {card.positive ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+                  {card.trend}
+                </span>
               </div>
-              <span className="stat-card-change text-emerald-600">
-                <ArrowUpRight className="w-3 h-3" />
-                {card.trend}
-              </span>
-            </div>
-            <div>
               <p className="stat-card-label">{card.label}</p>
               <p className="stat-card-value">{card.value}</p>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))}
+        </div>
       </div>
 
       {/* Main Content Row */}
-      <div className="two-column-grid">
-        <div className="card">
-          <div className="card-header flex items-center justify-between">
-            <div>
-              <h2 className="card-title">Project Status</h2>
-              <p className="card-subtitle">Overview of all projects</p>
+      <div className="content-section">
+        <div className="two-col-grid">
+          {/* Project Status Card */}
+          <div className="content-card-main">
+            <div className="card-header flex items-center justify-between">
+              <div>
+                <h2 className="card-title">Project Status</h2>
+                <p className="card-subtitle">Overview of all projects</p>
+              </div>
+              <div className="stat-card-icon-wrapper" style={{ background: '#3B82F6' }}>
+                <TrendingUp className="stat-card-icon" />
+              </div>
             </div>
-            <div className="p-3 bg-blue-50 rounded-xl">
-              <TrendingUp className="w-5 h-5 text-blue-600" />
-            </div>
+            {projectStatus.length > 0 ? (
+              <div style={{ height: 256 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={projectStatus} layout="vertical" margin={{ left: 20, right: 20 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" horizontal={false} />
+                    <XAxis type="number" stroke="#94A3B8" fontSize={12} />
+                    <YAxis dataKey="status" type="category" stroke="#64748B" fontSize={12} width={80} />
+                    <Bar dataKey="count" radius={[0, 6, 6, 0]}>
+                      {projectStatus.map((entry, index) => (
+                        <Bar key={`cell-${index}`} fill={STATUS_COLORS[entry.status] || '#94A3B8'} dataKey="count" />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            ) : (
+              <div className="empty-state" style={{ height: 256 }}>
+                <FolderKanban className="empty-state-icon" />
+                <p className="empty-state-title">No projects yet</p>
+                <p className="empty-state-description">Create your first project to get started</p>
+              </div>
+            )}
           </div>
-          {projectStatus.length > 0 ? (
-            <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={projectStatus} layout="vertical" margin={{ left: 20, right: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" horizontal={false} />
-                  <XAxis type="number" stroke="#94A3B8" fontSize={12} />
-                  <YAxis dataKey="status" type="category" stroke="#64748B" fontSize={12} width={80} />
-                  <Bar dataKey="count" radius={[0, 6, 6, 0]}>
-                    {projectStatus.map((entry, index) => (
-                      <Bar key={`cell-${index}`} fill={STATUS_COLORS[entry.status] || '#94A3B8'} dataKey="count" />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          ) : (
-            <div className="empty-state h-64">
-              <FolderKanban className="empty-state-icon" />
-              <p className="empty-state-title">No projects yet</p>
-              <p className="empty-state-subtitle">Create your first project to get started</p>
-            </div>
-          )}
-        </div>
 
-        <div className="card">
-          <div className="card-header flex items-center justify-between">
-            <div>
-              <h2 className="card-title">Recent Activity</h2>
-              <p className="card-subtitle">Latest updates</p>
+          {/* Recent Activity Card */}
+          <div className="content-card-side">
+            <div className="card-header flex items-center justify-between">
+              <div>
+                <h2 className="card-title">Recent Activity</h2>
+                <p className="card-subtitle">Latest updates</p>
+              </div>
+              <div className="stat-card-icon-wrapper" style={{ background: '#8B5CF6' }}>
+                <Activity className="stat-card-icon" />
+              </div>
             </div>
-            <div className="p-3 bg-violet-50 rounded-xl">
-              <Activity className="w-5 h-5 text-violet-600" />
-            </div>
-          </div>
-          {activity.length > 0 ? (
-            <div className="space-y-1">
-              {activity.slice(0, 5).map((item, index) => (
-                <div key={item.id} className="flex items-start gap-4 p-3 rounded-lg hover:bg-slate-50 -mx-2">
-                  <div 
-                    className="w-2 h-2 rounded-full mt-2 shrink-0"
-                    style={{ backgroundColor: ACTIVITY_COLORS[index % ACTIVITY_COLORS.length] }}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-slate-700 truncate">{item.details}</p>
-                    <p className="text-xs text-slate-400 mt-1">
-                      {format(new Date(item.created_at), 'MMM d, h:mm a')}
-                    </p>
+            {activity.length > 0 ? (
+              <div>
+                {activity.slice(0, 5).map((item, index) => (
+                  <div key={item.id} className="flex items-start gap-3" style={{ padding: '12px 0', borderBottom: index < 4 ? '1px solid #E5E7EB' : 'none' }}>
+                    <div 
+                      style={{ 
+                        width: 8, 
+                        height: 8, 
+                        borderRadius: '50%', 
+                        backgroundColor: ACTIVITY_COLORS[index % ACTIVITY_COLORS.length],
+                        marginTop: 6,
+                        flexShrink: 0 
+                      }}
+                    />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p className="text-sm" style={{ color: '#374151', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.details}</p>
+                      <p className="text-xs" style={{ color: '#9CA3AF', marginTop: 4 }}>
+                        {format(new Date(item.created_at), 'MMM d, h:mm a')}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="empty-state h-48">
-              <Clock className="empty-state-icon" />
-              <p className="empty-state-title">No recent activity</p>
-              <p className="empty-state-subtitle">Activity will appear here as you work</p>
-            </div>
-          )}
+                ))}
+              </div>
+            ) : (
+              <div className="empty-state" style={{ height: 200 }}>
+                <Clock className="empty-state-icon" />
+                <p className="empty-state-title">No recent activity</p>
+                <p className="empty-state-description">Activity will appear here as you work</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Action Buttons Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <Link to="/projects" className="action-card">
-          <div className="p-4 bg-amber-50 rounded-xl action-card-icon">
-            <FolderKanban className="w-6 h-6 text-amber-500" />
-          </div>
-          <div className="action-card-content">
-            <h3>New Project</h3>
-            <p>Start a new project</p>
-          </div>
-        </Link>
-        <Link to="/tasks" className="action-card">
-          <div className="p-4 bg-purple-50 rounded-xl action-card-icon">
-            <CheckSquare className="w-6 h-6 text-purple-500" />
-          </div>
-          <div className="action-card-content">
-            <h3>New Task</h3>
-            <p>Create a new task</p>
-          </div>
-        </Link>
-        <Link to="/settings" className="action-card">
-          <div className="p-4 bg-emerald-50 rounded-xl action-card-icon">
-            <Download className="w-6 h-6 text-emerald-500" />
-          </div>
-          <div className="action-card-content">
-            <h3>Export Data</h3>
-            <p>Backup your data</p>
-          </div>
-        </Link>
+      {/* Action Cards Row */}
+      <div className="content-section">
+        <div className="action-cards-grid">
+          <Link to="/projects" className="card" style={{ display: 'flex', alignItems: 'center', gap: 20, padding: 24 }}>
+            <div style={{ width: 48, height: 48, borderRadius: 12, background: '#FEF3C7', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <FolderKanban size={24} color="#D97706" />
+            </div>
+            <div>
+              <p style={{ fontSize: 16, fontWeight: 600, color: '#111827', marginBottom: 4 }}>New Project</p>
+              <p style={{ fontSize: 14, color: '#6B7280' }}>Start a new project</p>
+            </div>
+          </Link>
+          <Link to="/tasks" className="card" style={{ display: 'flex', alignItems: 'center', gap: 20, padding: 24 }}>
+            <div style={{ width: 48, height: 48, borderRadius: 12, background: '#EDE9FE', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <CheckSquare size={24} color="#7C3AED" />
+            </div>
+            <div>
+              <p style={{ fontSize: 16, fontWeight: 600, color: '#111827', marginBottom: 4 }}>New Task</p>
+              <p style={{ fontSize: 14, color: '#6B7280' }}>Create a new task</p>
+            </div>
+          </Link>
+          <Link to="/settings" className="card" style={{ display: 'flex', alignItems: 'center', gap: 20, padding: 24 }}>
+            <div style={{ width: 48, height: 48, borderRadius: 12, background: '#D1FAE5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <Download size={24} color="#059669" />
+            </div>
+            <div>
+              <p style={{ fontSize: 16, fontWeight: 600, color: '#111827', marginBottom: 4 }}>Export Data</p>
+              <p style={{ fontSize: 14, color: '#6B7280' }}>Backup your data</p>
+            </div>
+          </Link>
+        </div>
       </div>
     </div>
   );

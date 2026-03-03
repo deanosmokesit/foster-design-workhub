@@ -1,0 +1,127 @@
+/* ==========================================
+   BASE LAYOUT STYLES
+   ========================================== */
+
+/* PAGE LAYOUT - Apply to EVERY page */
+.page-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: var(--page-padding-top) var(--page-padding-x) var(--page-padding-bottom);
+  background: var(--color-bg-page);
+  box-sizing: border-box;
+}
+
+/* PAGE HEADER - Consistent across all pages */
+.page-header {
+  margin-bottom: var(--section-spacing);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-6);
+}
+
+.page-header-content {
+  flex: 1;
+}
+
+.page-title {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-2);
+  line-height: 1.2;
+}
+
+.page-subtitle {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+/* FILTER/SEARCH BAR - Consistent across list pages */
+.filter-bar {
+  display: flex;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  align-items: center;
+}
+
+.filter-bar .search-wrapper {
+  flex: 1;
+  max-width: 400px;
+}
+
+/* CONTENT SECTIONS */
+.content-section {
+  margin-bottom: var(--section-spacing);
+}
+
+.content-section:last-child {
+  margin-bottom: 0;
+}
+
+/* RESPONSIVE GRID LAYOUTS */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--card-gap);
+}
+
+.two-col-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--card-gap);
+}
+
+.action-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+}
+
+/* Responsive breakpoints */
+@media (max-width: 1023px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .two-col-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .action-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .page-container {
+    padding: var(--space-8) var(--space-8) var(--space-16);
+  }
+  
+  .page-header {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-bar .search-wrapper {
+    max-width: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .page-container {
+    padding: var(--space-6) var(--space-6) var(--space-12);
+  }
+  
+  .page-title {
+    font-size: var(--text-2xl);
+  }
+}

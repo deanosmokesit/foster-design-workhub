@@ -28,19 +28,12 @@ const SERVICE_TYPES = [
 const STATUS_OPTIONS = ['New', 'In Progress', 'On Hold', 'Completed', 'Cancelled'];
 const PRIORITY_OPTIONS = ['Low', 'Medium', 'High', 'Urgent'];
 
-const STATUS_STYLES: Record<string, { bg: string; text: string; dot: string }> = {
-  'New': { bg: 'bg-blue-100/70', text: 'text-blue-700', dot: 'bg-blue-500' },
-  'In Progress': { bg: 'bg-amber-100/70', text: 'text-amber-700', dot: 'bg-amber-500' },
-  'On Hold': { bg: 'bg-slate-100/70', text: 'text-slate-600', dot: 'bg-slate-400' },
-  'Completed': { bg: 'bg-emerald-100/70', text: 'text-emerald-700', dot: 'bg-emerald-500' },
-  'Cancelled': { bg: 'bg-red-100/70', text: 'text-red-600', dot: 'bg-red-500' },
-};
-
-const PRIORITY_STYLES: Record<string, { bg: string; text: string }> = {
-  'Low': { bg: 'bg-slate-100/70', text: 'text-slate-600' },
-  'Medium': { bg: 'bg-blue-100/70', text: 'text-blue-700' },
-  'High': { bg: 'bg-orange-100/70', text: 'text-orange-700' },
-  'Urgent': { bg: 'bg-red-100/70', text: 'text-red-600' },
+const STATUS_BADGE_MAP: Record<string, string> = {
+  'New': 'badge badge-info',
+  'In Progress': 'badge badge-warning',
+  'On Hold': 'badge badge-default',
+  'Completed': 'badge badge-success',
+  'Cancelled': 'badge badge-default',
 };
 
 export default function Projects() {
@@ -198,144 +191,129 @@ export default function Projects() {
 
   return (
     <>
-      <div className="page-header flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-        <div>
-          <h1 className="page-title">Projects</h1>
-          <p className="page-subtitle">Manage your client projects</p>
+      <div className="page-container">
+        <div className="page-header">
+          <div className="page-header-content">
+            <h1 className="page-title">Projects</h1>
+            <p className="page-subtitle">Manage your client projects</p>
+          </div>
+          <button
+            onClick={() => {
+              resetForm();
+              setEditingProject(null);
+              setShowModal(true);
+            }}
+            className="btn btn-primary"
+          >
+            <Plus className="w-5 h-5" />
+            New Project
+          </button>
         </div>
-        <button
-          onClick={() => {
-            resetForm();
-            setEditingProject(null);
-            setShowModal(true);
-          }}
-          className="btn btn-primary"
-        >
-          <Plus className="w-5 h-5" />
-          New Project
-        </button>
-      </div>
 
-      <div className="flex flex-col sm:flex-row gap-6">
-        <div className="search-bar flex-1">
-          <Search className="w-5 h-5 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search projects..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-bar-input"
-          />
+        <div className="filter-bar">
+          <div className="search-wrapper">
+            <Search className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search projects..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+          </div>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Status</option>
+            {STATUS_OPTIONS.map((status) => (
+              <option key={status} value={status}>{status}</option>
+            ))}
+          </select>
         </div>
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="filter-dropdown"
-        >
-          <option value="all">All Status</option>
-          {STATUS_OPTIONS.map((status) => (
-            <option key={status} value={status}>{status}</option>
-          ))}
-        </select>
-      </div>
 
-      {filteredProjects.length > 0 ? (
-        <div className="grid gap-8">
-          {filteredProjects.map((project) => {
-            const statusStyle = STATUS_STYLES[project.status] || { bg: 'bg-slate-100/70', text: 'text-slate-600', dot: 'bg-slate-400' };
-            const priorityStyle = PRIORITY_STYLES[project.priority] || { bg: 'bg-slate-100/70', text: 'text-slate-600' };
-            
-            return (
-              <div
-                key={project.id}
-                className="glass-card p-10 group"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
-                  <div className="flex items-start gap-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-3xl flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform">
-                      <FolderKanban className="w-7 h-7 text-amber-500" />
+        {filteredProjects.length > 0 ? (
+          <div className="content-section">
+            {filteredProjects.map((project) => {
+              const statusBadge = STATUS_BADGE_MAP[project.status] || 'badge badge-default';
+              
+              return (
+                <div key={project.id} className="list-item-card">
+                  <div className="list-item-avatar">
+                    <FolderKanban className="w-6 h-6 text-amber-500" />
+                  </div>
+                  <div className="list-item-content">
+                    <div className="list-item-header">
+                      <span className="list-item-title">{project.name}</span>
+                      <span className={statusBadge}>{project.status}</span>
+                      <span className="badge badge-info">{project.priority}</span>
                     </div>
-                    <div>
-                      <div className="flex items-center gap-3 flex-wrap">
-                        <h3 className="text-xl font-semibold text-slate-900">{project.name}</h3>
-                        <div className="flex items-center gap-2">
-                          <span className={`w-2.5 h-2.5 rounded-full ${statusStyle.dot}`} />
-                          <span className={`badge ${statusStyle.bg} ${statusStyle.text}`}>
-                            {project.status}
-                          </span>
-                        </div>
-                        <span className={`badge ${priorityStyle.bg} ${priorityStyle.text}`}>
-                          {project.priority}
-                        </span>
+                    <div className="list-item-meta">
+                      <div className="list-item-meta-row">
+                        <span>{project.client_name}</span>
+                        <span>•</span>
+                        <span>{project.service_type}</span>
                       </div>
-                      <p className="text-base text-slate-500 mt-2">{project.client_name}</p>
-                      <div className="flex flex-wrap gap-x-6 gap-y-3 mt-4 text-base text-slate-500">
-                        <div className="flex items-center gap-2">
-                          <FolderKanban className="w-5 h-5" />
-                          {project.service_type}
-                        </div>
+                      <div className="list-item-meta-row">
                         {project.due_date && (
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-5 h-5" />
-                            Due {format(new Date(project.due_date), 'MMM d, yyyy')}
-                          </div>
+                          <>
+                            <Calendar className="w-4 h-4" />
+                            <span>Due {format(new Date(project.due_date), 'MMM d, yyyy')}</span>
+                          </>
                         )}
                         {project.estimated_hours && (
-                          <div className="flex items-center gap-2">
-                            <Clock className="w-5 h-5" />
-                            {project.actual_hours || 0}/{project.estimated_hours}h
-                          </div>
+                          <>
+                            <Clock className="w-4 h-4" />
+                            <span>{project.actual_hours || 0}/{project.estimated_hours}h</span>
+                          </>
                         )}
                         {project.total_budget && (
-                          <div className="flex items-center gap-2">
-                            <DollarSign className="w-5 h-5" />
-                            £{project.total_budget.toLocaleString()}
-                          </div>
+                          <>
+                            <DollarSign className="w-4 h-4" />
+                            <span>£{project.total_budget.toLocaleString()}</span>
+                          </>
                         )}
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 sm:flex-shrink-0">
+                  <div className="list-item-actions">
                     <button
                       onClick={() => openEditModal(project)}
-                      className="p-4 text-slate-400 hover:text-blue-600 hover:bg-blue-50/50 rounded-2xl transition-colors"
+                      className="icon-button"
                     >
                       <Edit2 className="w-5 h-5" />
                     </button>
                     <button
                       onClick={() => setShowDeleteConfirm(project.id!)}
-                      className="p-4 text-slate-400 hover:text-red-600 hover:bg-red-50/50 rounded-2xl transition-colors"
+                      className="icon-button"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
                 </div>
-                {project.description && (
-                  <p className="mt-6 pt-6 border-t border-slate-100/50 text-base text-slate-500 line-clamp-2">
-                    {project.description}
-                  </p>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <div className="glass-card p-16 text-center">
-          <div className="w-20 h-20 bg-slate-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
-            <FolderKanban className="w-10 h-10 text-slate-300" />
+              );
+            })}
           </div>
-          <p className="text-xl text-slate-500">No projects found</p>
-          <button
-            onClick={() => {
-              resetForm();
-              setShowModal(true);
-            }}
-            className="mt-6 text-blue-500 hover:text-blue-600 text-lg font-medium"
-          >
-            Create your first project
-          </button>
-        </div>
-      )}
+        ) : (
+          <div className="content-section">
+            <div className="empty-state">
+              <FolderKanban className="w-12 h-12" />
+              <p>No projects found</p>
+              <button
+                onClick={() => {
+                  resetForm();
+                  setShowModal(true);
+                }}
+                className="btn btn-primary"
+              >
+                <Plus className="w-5 h-5" />
+                Create your first project
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
 
       {showModal && (
         <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-6">
@@ -571,3 +549,4 @@ export default function Projects() {
       </>
     );
   }
+}
