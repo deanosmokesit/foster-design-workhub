@@ -542,7 +542,6 @@ export default function Projects() {
               >
                 Delete
               </button>
-              </div>
             </div>
           </div>
         )}
