@@ -184,9 +184,15 @@ export default function Projects() {
       <div className="flex items-center justify-center h-80">
         <div className="relative">
           <div className="w-10 h-10 border-3 border-blue-200 border-t-blue-500 rounded-full animate-spin" />
-        </div>
-      </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </>
     );
+  }
+}
+}
   }
 
   return (
@@ -519,33 +525,34 @@ export default function Projects() {
               </div>
             </form>
           </div>
-        </div>
-      )}
+        )}
 
-      {showDeleteConfirm && (
-        <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-6">
-          <div className="modal-content p-10 w-full max-w-md">
-            <h3 className="text-xl font-semibold text-slate-900 mb-3">Delete Project</h3>
-            <p className="text-base text-slate-500 mb-8">
-              Are you sure you want to delete this project? This action cannot be undone.
-            </p>
-            <div className="flex justify-end gap-4">
-              <button
-                onClick={() => setShowDeleteConfirm(null)}
-                className="btn btn-secondary"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => handleDelete(showDeleteConfirm)}
-                className="btn text-white bg-red-500 hover:bg-red-600"
-              >
-                Delete
-              </button>
+        {showDeleteConfirm && (
+          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-6">
+            <div className="modal-content p-10 w-full max-w-md">
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">Delete Project</h3>
+              <p className="text-base text-slate-500 mb-8">
+                Are you sure you want to delete this project? This action cannot be undone.
+              </p>
+              <div className="flex justify-end gap-4">
+                <button
+                  onClick={() => setShowDeleteConfirm(null)}
+                  className="btn btn-secondary"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleDelete(showDeleteConfirm)}
+                  className="btn text-white bg-red-500 hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
         )}
       </>
     );
   }
+}
 }
