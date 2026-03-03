@@ -494,7 +494,6 @@ export default function Clients() {
               >
                 Delete
               </button>
-              </div>
             </div>
           </div>
         )}
