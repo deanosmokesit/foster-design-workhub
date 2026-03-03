@@ -521,33 +521,33 @@ export default function Projects() {
               </div>
             </form>
           </div>
-        )}
+        </div>
+      )}
 
-        {showDeleteConfirm && (
-          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-6">
-            <div className="modal-content p-10 w-full max-w-md">
-              <h3 className="text-xl font-semibold text-slate-900 mb-3">Delete Project</h3>
-              <p className="text-base text-slate-500 mb-8">
-                Are you sure you want to delete this project? This action cannot be undone.
-              </p>
-              <div className="flex justify-end gap-4">
-                <button
-                  onClick={() => setShowDeleteConfirm(null)}
-                  className="btn btn-secondary"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => handleDelete(showDeleteConfirm)}
-                  className="btn text-white bg-red-500 hover:bg-red-600"
-                >
-                  Delete
-                </button>
-              </div>
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-6">
+          <div className="modal-content p-10 w-full max-w-md">
+            <h3 className="text-xl font-semibold text-slate-900 mb-3">Delete Project</h3>
+            <p className="text-base text-slate-500 mb-8">
+              Are you sure you want to delete this project? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={() => setShowDeleteConfirm(null)}
+                className="btn btn-secondary"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDelete(showDeleteConfirm)}
+                className="btn text-white bg-red-500 hover:bg-red-600"
+              >
+                Delete
+              </button>
             </div>
           </div>
-        )}
-      </>
-    );
-  }
+        </div>
+      )}
+    </>
+  );
 }
