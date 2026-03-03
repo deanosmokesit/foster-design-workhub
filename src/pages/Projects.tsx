@@ -181,18 +181,14 @@ export default function Projects() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-80">
-        <div className="relative">
-          <div className="w-10 h-10 border-3 border-blue-200 border-t-blue-500 rounded-full animate-spin" />
-              </div>
-            </div>
+      <div className="page-container">
+        <div className="flex items-center justify-center" style={{ height: '40vh' }}>
+          <div className="relative">
+            <div className="w-10 h-10 border-3 border-blue-200 border-t-blue-500 rounded-full animate-spin" />
           </div>
-        )}
-      </>
+        </div>
+      </div>
     );
-  }
-}
-}
   }
 
   return (
